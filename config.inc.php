@@ -13,7 +13,7 @@ declare(strict_types=1);
  * This is needed for cookie based authentication to encrypt password in
  * cookie. Needs to be 32 chars long.
  */
-$cfg['blowfish_secret'] = 'asdk34massd5ad235sd5sa642d6asdas3sa2d'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
+$cfg['blowfish_secret'] = ''; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
 
 /**
  * Servers configuration
@@ -65,10 +65,12 @@ $cfg['Servers'][$i]['AllowNoPassword'] = false;
 
 /* Heroku remote server */
 $i++;
+$cfg['Servers'][$i]['verbose'] = 'ClearDB';
 $cfg["Servers"][$i]["host"] = "eu-cdbr-west-02.cleardb.net"; //provide hostname
-$cfg["Servers"][$i]["user"] = "b214e938e157d1:854c8f16"; //user name for your remote server
+$cfg["Servers"][$i]["user"] = "b214e938e157d1"; //user name for your remote server
 $cfg["Servers"][$i]["password"] = "854c8f16"; //password
 $cfg["Servers"][$i]["auth_type"] = "config"; // keep it as config
+
 /**
  * End of servers configuration
  */
@@ -164,4 +166,3 @@ $cfg['SaveDir'] = '';
  * You can find more configuration options in the documentation
  * in the doc/ folder or at <https://docs.phpmyadmin.net/>.
  */
-
