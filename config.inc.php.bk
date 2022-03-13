@@ -66,11 +66,10 @@ $cfg['Servers'][$i]['AllowNoPassword'] = false;
 /* Heroku remote server */
 $i++;
 $cfg['Servers'][$i]['verbose'] = 'ClearDB';
-$cfg["Servers"][$i]["host"] = "mysql.colorvision.design"; //provide hostname
-$cfg['Servers'][$i]['extension'] = 'mysqli';
-$cfg['Servers'][$i]['auth_type'] = 'cookie';
-$cfg['Servers'][$i]['user'] = '';
-$cfg['Servers'][$i]['password'] = '';
+$cfg["Servers"][$i]["host"] = "eu-cdbr-west-02.cleardb.net"; //provide hostname
+$cfg["Servers"][$i]["user"] = "b214e938e157d1"; //user name for your remote server
+$cfg["Servers"][$i]["password"] = "854c8f16"; //password
+$cfg["Servers"][$i]["auth_type"] = "config"; // keep it as config
 
 /**
  * End of servers configuration
