@@ -21,18 +21,15 @@ $cfg['blowfish_secret'] = ''; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
  */
 $i = 0;
 
-/**
- * First server
- */
+/* Heroku remote server */
 $i++;
-/* Authentication type */
+$cfg['Servers'][$i]['verbose'] = 'CLEARDB';
+$cfg["Servers"][$i]["host"] = "eu-cdbr-west-02.cleardb.net"; //provide hostname
+$cfg['Servers'][$i]['extension'] = 'mysqli';
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
-/* Server parameters */
-$cfg['Servers'][$i]['host'] = 'mysql.colorvision.design';
-$cfg['Servers'][$i]['user'] = '';
-$cfg['Servers'][$i]['password'] = '';
-$cfg['Servers'][$i]['compress'] = false;
-$cfg['Servers'][$i]['AllowNoPassword'] = false;
+$cfg["Servers"][$i]["user"] = "b214e938e157d1"; //user name for your remote server
+$cfg["Servers"][$i]["password"] = "854c8f16"; //password
+$cfg["Servers"][$i]["auth_type"] = "config"; // keep it as config
 
 /**
  * phpMyAdmin configuration storage settings.
