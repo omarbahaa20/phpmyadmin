@@ -34,7 +34,7 @@ AJAX.registerOnload('server_status_advisor.js', function () {
         };
         $instructionsDialog.dialog({
             title: PMA_messages.strAdvisorSystem,
-            width: '60%',
+            width: 700,
             buttons: dlgBtns
         });
     });

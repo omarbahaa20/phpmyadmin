@@ -56,7 +56,19 @@ class Processes
      */
     public static function getHtmlForServerProcesslist()
     {
+        $url_params = array();
+
         $show_full_sql = ! empty($_POST['full']);
+        if ($show_full_sql) {
+            $url_params['full'] = 1;
+            $full_text_link = 'server_status_processes.php' . Url::getCommon(
+                array(), '?'
+            );
+        } else {
+            $full_text_link = 'server_status_processes.php' . Url::getCommon(
+                array('full' => 1)
+            );
+        }
 
         // This array contains display name and real column name of each
         // sortable column in the table
@@ -142,7 +154,7 @@ class Processes
 
             $retval .= '<th>';
             $columnUrl = Url::getCommon($column);
-            $retval .= '<a href="server_status_processes.php" data-post="' . $columnUrl . '" class="sortlink">';
+            $retval .= '<a href="server_status_processes.php' . $columnUrl . '" class="sortlink">';
 
             $retval .= $column['column_name'];
 
@@ -164,22 +176,7 @@ class Processes
             $retval .= '</a>';
 
             if (0 === --$sortableColCount) {
-                $url_params = array();
-                if ($show_full_sql) {
-                    $url_params['full'] = '';
-                } else {
-                    $url_params['full'] = 1;
-                }
-                if (isset($_POST['showExecuting'])) {
-                    $url_params['showExecuting'] = 'on';
-                }
-                if (isset($_POST['order_by_field'])) {
-                    $url_params['order_by_field'] = $_POST['order_by_field'];
-                }
-                if (isset($_POST['sort_order'])) {
-                    $url_params['sort_order'] = $_POST['sort_order'];
-                }
-                $retval .= '<a href="server_status_processes.php" data-post="' . Url::getCommon($url_params, '') . '" >';
+                $retval .= '<a href="' . $full_text_link . '">';
                 if ($show_full_sql) {
                     $retval .= Util::getImage('s_partialtext',
                         __('Truncate Shown Queries'), ['class' => 'icon_fulltext']);

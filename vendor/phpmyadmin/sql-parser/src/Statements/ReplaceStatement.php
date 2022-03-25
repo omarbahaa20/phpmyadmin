@@ -49,7 +49,7 @@ class ReplaceStatement extends Statement
      */
     public static $OPTIONS = array(
         'LOW_PRIORITY' => 1,
-        'DELAYED' => 1
+        'DELAYED' => 1,
     );
 
     /**
@@ -87,14 +87,13 @@ class ReplaceStatement extends Statement
      */
     public function build()
     {
-        $ret = 'REPLACE ' . $this->options;
-        $ret = trim($ret) . ' INTO ' . $this->into;
+        $ret = 'REPLACE ' . $this->options . ' INTO ' . $this->into;
 
-        if (! is_null($this->values) && count($this->values) > 0) {
+        if ($this->values != null && count($this->values) > 0) {
             $ret .= ' VALUES ' . Array2d::build($this->values);
-        } elseif (! is_null($this->set) && count($this->set) > 0) {
+        } elseif ($this->set != null && count($this->set) > 0) {
             $ret .= ' SET ' . SetOperation::build($this->set);
-        } elseif (! is_null($this->select) && strlen($this->select) > 0) {
+        } elseif ($this->select != null && strlen($this->select) > 0) {
             $ret .= ' ' . $this->select->build();
         }
 

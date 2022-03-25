@@ -157,7 +157,7 @@ class Designer
         $designerConfig->scriptContr = $script_contr;
         $designerConfig->server = $GLOBALS['server'];
         $designerConfig->scriptDisplayField = $script_display_field;
-        $designerConfig->displayPage = (int) $display_page;
+        $designerConfig->displayPage = $display_page;
         $designerConfig->tablesEnabled = $cfgRelation['pdfwork'];
         return Template::get('database/designer/js_fields')->render([
             'designer_config' => json_encode($designerConfig)
@@ -200,8 +200,7 @@ class Designer
                 . Util::backquote($cfgRelation['db']) . '.'
                 . Util::backquote($cfgRelation['designer_settings'])
                 . ' WHERE ' . Util::backquote('username') . ' = "'
-                . $GLOBALS['dbi']->escapeString($GLOBALS['cfg']['Server']['user'])
-                . '";';
+                . $GLOBALS['cfg']['Server']['user'] . '";';
 
             $result = $GLOBALS['dbi']->fetchSingleRow($query);
 
@@ -285,31 +284,36 @@ class Designer
     /**
      * Return HTML for the table list
      *
+     * @param array $tab_pos      table positions
+     * @param int   $display_page page number of the selected page
+     *
      * @return string html
      */
-    public function getHtmlTableList()
+    public function getHtmlTableList(array $tab_pos, $display_page)
     {
         return Template::get('database/designer/table_list')->render([
+            'tab_pos' => $tab_pos,
+            'display_page' => $display_page,
             'theme' => $GLOBALS['PMA_Theme'],
+            'table_names' => $GLOBALS['designer']['TABLE_NAME'],
+            'table_names_url' => $GLOBALS['designer_url']['TABLE_NAME'],
+            'table_names_small_url' => $GLOBALS['designer_url']['TABLE_NAME_SMALL'],
+            'table_names_out' => $GLOBALS['designer_out']['TABLE_NAME'],
         ]);
     }
 
     /**
      * Get HTML to display tables on designer page
      *
-     * @param string $db                       The database name from the request
-     * @param array  $designerTables           The designer tables
-     * @param array  $tab_pos                  tables positions
-     * @param int    $display_page             page number of the selected page
-     * @param array  $tab_column               table column info
-     * @param array  $tables_all_keys          all indices
-     * @param array  $tables_pk_or_unique_keys unique or primary indices
+     * @param array $tab_pos                  tables positions
+     * @param int   $display_page             page number of the selected page
+     * @param array $tab_column               table column info
+     * @param array $tables_all_keys          all indices
+     * @param array $tables_pk_or_unique_keys unique or primary indices
      *
      * @return string html
      */
     public function getDatabaseTables(
-        $db,
-        array $designerTables,
         array $tab_pos,
         $display_page,
         array $tab_column,
@@ -318,14 +322,20 @@ class Designer
     ) {
         return Template::get('database/designer/database_tables')->render([
             'db' => $GLOBALS['db'],
-            'get_db' => $db,
+            'get_db' => $_GET['db'],
             'has_query' => isset($_REQUEST['query']),
             'tab_pos' => $tab_pos,
             'display_page' => $display_page,
             'tab_column' => $tab_column,
             'tables_all_keys' => $tables_all_keys,
             'tables_pk_or_unique_keys' => $tables_pk_or_unique_keys,
-            'tables' => $designerTables,
+            'table_names' => $GLOBALS['designer']['TABLE_NAME'],
+            'table_names_url' => $GLOBALS['designer_url']['TABLE_NAME'],
+            'table_names_small' => $GLOBALS['designer']['TABLE_NAME_SMALL'],
+            'table_names_small_url' => $GLOBALS['designer_url']['TABLE_NAME_SMALL'],
+            'table_names_small_out' => $GLOBALS['designer_out']['TABLE_NAME_SMALL'],
+            'table_types' => $GLOBALS['designer']['TABLE_TYPE'],
+            'owner_out' => $GLOBALS['designer_out']['OWNER'],
             'theme' => $GLOBALS['PMA_Theme'],
         ]);
     }

@@ -36,13 +36,7 @@ class Routine
         $type = DataType::parse(new Parser(), $lexer->list);
 
         if ($type === null) {
-            return array(
-                '',
-                '',
-                '',
-                '',
-                ''
-            );
+            return array('', '', '', '', '');
         }
 
         $options = array();
@@ -55,7 +49,7 @@ class Routine
             '',
             $type->name,
             implode(',', $type->parameters),
-            implode(' ', $options)
+            implode(' ', $options),
         );
     }
 
@@ -74,13 +68,7 @@ class Routine
         $param = ParameterDefinition::parse(new Parser(), $lexer->list);
 
         if (empty($param[0])) {
-            return array(
-                '',
-                '',
-                '',
-                '',
-                ''
-            );
+            return array('', '', '', '', '');
         }
 
         $param = $param[0];
@@ -95,7 +83,7 @@ class Routine
             $param->name,
             $param->type->name,
             implode(',', $param->type->parameters),
-            implode(' ', $options)
+            implode(' ', $options),
         );
     }
 
@@ -115,10 +103,10 @@ class Routine
             'type' => array(),
             'length' => array(),
             'length_arr' => array(),
-            'opts' => array()
+            'opts' => array(),
         );
 
-        if (! empty($statement->parameters)) {
+        if (!empty($statement->parameters)) {
             $idx = 0;
             foreach ($statement->parameters as $param) {
                 $retval['dir'][$idx] = $param->inOut;

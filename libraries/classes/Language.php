@@ -151,7 +151,7 @@ class Language
     }
 
     /**
-     * Checks whether language is RTL
+     * Checks whether langauge is RTL
      *
      * @return bool
      */

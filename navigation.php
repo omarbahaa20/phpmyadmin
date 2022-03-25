@@ -11,7 +11,6 @@ use PhpMyAdmin\Config\PageSettings;
 use PhpMyAdmin\Navigation\Navigation;
 use PhpMyAdmin\Relation;
 use PhpMyAdmin\Response;
-use PhpMyAdmin\Util;
 
 require_once './libraries/common.inc.php';
 
@@ -30,10 +29,6 @@ if (! $response->isAjax()) {
 if (isset($_POST['getNaviSettings']) && $_POST['getNaviSettings']) {
     $response->addJSON('message', PageSettings::getNaviSettings());
     exit();
-}
-
-if (isset($_POST['reload'])) {
-    Util::cacheSet('dbs_to_test', false);// Empty database list cache, see #14252
 }
 
 $relation = new Relation();

@@ -32,7 +32,6 @@ class FormProcessing
             // revert erroneous fields to their default values
             $form_display->fixErrors();
             $response = Response::getInstance();
-            $response->disable();
             $response->generateHeader303('index.php' . Url::getCommonRaw());
         }
 
@@ -45,7 +44,6 @@ class FormProcessing
         // check for form errors
         if (!$form_display->hasErrors()) {
             $response = Response::getInstance();
-            $response->disable();
             $response->generateHeader303('index.php' . Url::getCommonRaw());
             return;
         }

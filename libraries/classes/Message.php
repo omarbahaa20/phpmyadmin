@@ -454,7 +454,7 @@ class Message
      */
     public function addParam($param)
     {
-        if ($param instanceof Message || is_float($param) || is_int($param)) {
+        if ($param instanceof Message) {
             $this->params[] = $param;
         } else {
             $this->params[] = htmlspecialchars($param);

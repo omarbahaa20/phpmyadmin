@@ -128,9 +128,7 @@ $GLOBALS['PMA_Config'] = new Config(CONFIG_FILE);
 /**
  * include session handling after the globals, to prevent overwriting
  */
-if (! defined('PMA_NO_SESSION')) {
-    Session::setUp($GLOBALS['PMA_Config'], $GLOBALS['error_handler']);
-}
+Session::setUp($GLOBALS['PMA_Config'], $GLOBALS['error_handler']);
 
 /**
  * init some variables LABEL_variables_init
@@ -343,8 +341,8 @@ if (! defined('PMA_MINIMUM_COMMON')) {
                 . ' ' . $cfg['Server']['auth_type']
             );
         }
-        if (isset($_POST['pma_password']) && strlen($_POST['pma_password']) > 256) {
-            $_POST['pma_password'] = substr($_POST['pma_password'], 0, 256);
+        if (isset($_REQUEST['pma_password']) && strlen($_REQUEST['pma_password']) > 256) {
+            $_REQUEST['pma_password'] = substr($_REQUEST['pma_password'], 0, 256);
         }
         $auth_plugin = new $auth_class();
 

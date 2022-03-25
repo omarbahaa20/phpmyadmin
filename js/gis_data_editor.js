@@ -145,8 +145,7 @@ function loadGISEditor (value, field, type, input_name) {
         'type' : type,
         'input_name' : input_name,
         'get_gis_editor' : true,
-        'ajax_request': true,
-        'server': PMA_commonParams.get('server')
+        'ajax_request': true
     }, function (data) {
         if (typeof data !== 'undefined' && data.success === true) {
             $gis_editor.html(data.gis_editor);

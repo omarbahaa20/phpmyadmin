@@ -214,6 +214,7 @@ $cfg_db['Export']['texytext_null'] = 'short_string';
 $cfg_db['Console']['Mode'] = array(
     'info', 'show', 'collapse'
 );
+$cfg_db['Console']['Height'] = 'integer';
 $cfg_db['Console']['OrderBy'] = ['exec', 'time', 'count'];
 $cfg_db['Console']['Order'] = ['asc', 'desc'];
 
@@ -229,7 +230,6 @@ $cfg_db['_overrides'] = array();
  * Use only full paths and form ids
  */
 $cfg_db['_validators'] = array(
-    'Console/Height' => 'validateNonNegativeNumber',
     'CharTextareaCols' => 'validatePositiveNumber',
     'CharTextareaRows' => 'validatePositiveNumber',
     'ExecTimeLimit' => 'validateNonNegativeNumber',
@@ -253,11 +253,8 @@ $cfg_db['_validators'] = array(
     'MaxNavigationItems' => 'validatePositiveNumber',
     'MaxCharactersInDisplayedSQL' => 'validatePositiveNumber',
     'MaxRows' => 'validatePositiveNumber',
-    'MaxSizeForInputField' => 'validatePositiveNumber',
-    'MinSizeForInputField' => 'validateNonNegativeNumber',
     'MaxTableList' => 'validatePositiveNumber',
     'MemoryLimit' => array(array('validateByRegex', '/^(-1|(\d+(?:[kmg])?))$/i')),
-    'NavigationTreeDisplayItemFilterMinimum' => 'validatePositiveNumber',
     'NavigationTreeTableLevel' => 'validatePositiveNumber',
     'NavigationWidth' => 'validateNonNegativeNumber',
     'QueryHistoryMax' => 'validatePositiveNumber',

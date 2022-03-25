@@ -240,7 +240,6 @@ class ExportJson extends ExportPlugin
             DatabaseInterface::QUERY_UNBUFFERED
         );
         $columns_cnt = $GLOBALS['dbi']->numFields($result);
-        $fields_meta = $GLOBALS['dbi']->getFieldsMeta($result);
 
         $columns = array();
         for ($i = 0; $i < $columns_cnt; $i++) {
@@ -266,18 +265,10 @@ class ExportJson extends ExportPlugin
             $data = array();
 
             for ($i = 0; $i < $columns_cnt; $i++) {
-                if ($fields_meta[$i]->type === 'geometry') {
-                    // export GIS types as hex
-                    $record[$i] = '0x' . bin2hex($record[$i]);
-                }
                 $data[$columns[$i]] = $record[$i];
             }
 
-            $encodedData = $this->encode($data);
-            if (! $encodedData) {
-                return false;
-            }
-            if (! Export::outputHandler($encodedData)) {
+            if (!Export::outputHandler($this->encode($data))) {
                 return false;
             }
         }

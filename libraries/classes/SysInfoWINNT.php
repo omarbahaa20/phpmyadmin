@@ -85,11 +85,7 @@ class SysInfoWINNT extends SysInfoBase
                 $name = $propItem->Name;
                 if (empty($strValue) || in_array($name, $strValue)) {
                     $value = $objItem->$name;
-                    if (is_string($value)) {
-                        $arrInstance[$name] = trim($value);
-                    } else {
-                        $arrInstance[$name] = $value;
-                    }
+                    $arrInstance[$name] = trim($value);
                 }
             }
             $arrData[] = $arrInstance;

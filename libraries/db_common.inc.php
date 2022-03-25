@@ -81,14 +81,14 @@ if (! isset($is_db) || ! $is_db) {
 /**
  * Changes database charset if requested by the user
  */
-if (isset($_POST['submitcollation'])
-    && isset($_POST['db_collation'])
-    && ! empty($_POST['db_collation'])
+if (isset($_REQUEST['submitcollation'])
+    && isset($_REQUEST['db_collation'])
+    && ! empty($_REQUEST['db_collation'])
 ) {
-    list($db_charset) = explode('_', $_POST['db_collation']);
+    list($db_charset) = explode('_', $_REQUEST['db_collation']);
     $sql_query        = 'ALTER DATABASE '
         . PhpMyAdmin\Util::backquote($db)
-        . ' DEFAULT' . Util::getCharsetQueryPart($_POST['db_collation']);
+        . ' DEFAULT' . Util::getCharsetQueryPart($_REQUEST['db_collation']);
     $result           = $GLOBALS['dbi']->query($sql_query);
     $message          = Message::success();
 
@@ -96,33 +96,28 @@ if (isset($_POST['submitcollation'])
     * Changes tables charset if requested by the user
     */
     if (
-        isset($_POST['change_all_tables_collations']) &&
-        $_POST['change_all_tables_collations'] === 'on'
+        isset($_REQUEST['change_all_tables_collations']) &&
+        $_REQUEST['change_all_tables_collations'] == 'on'
     ) {
         list($tables, , , , , , , ,) = PhpMyAdmin\Util::getDbInfo($db, null);
         foreach($tables as $tableName => $data) {
-            if ($GLOBALS['dbi']->getTable($db, $tableName)->isView()) {
-                // Skip views, we can not change the collation of a view.
-                // issue #15283
-                continue;
-            }
             $sql_query      = 'ALTER TABLE '
             . PhpMyAdmin\Util::backquote($db)
             . '.'
             . PhpMyAdmin\Util::backquote($tableName)
-            . ' DEFAULT '
-            . Util::getCharsetQueryPart($_POST['db_collation']);
+            . 'DEFAULT '
+            . Util::getCharsetQueryPart($_REQUEST['db_collation']);
             $GLOBALS['dbi']->query($sql_query);
 
             /**
             * Changes columns charset if requested by the user
             */
             if (
-                isset($_POST['change_all_tables_columns_collations']) &&
-                $_POST['change_all_tables_columns_collations'] === 'on'
+                isset($_REQUEST['change_all_tables_columns_collations']) &&
+                $_REQUEST['change_all_tables_columns_collations'] == 'on'
             ) {
                 $operations = new Operations();
-                $operations->changeAllColumnsCollation($db, $tableName, $_POST['db_collation']);
+                $operations->changeAllColumnsCollation($db, $tableName, $_REQUEST['db_collation']);
             }
 
         }
@@ -138,18 +133,6 @@ if (isset($_POST['submitcollation'])
         $response->setRequestStatus($message->isSuccess());
         $response->addJSON('message', $message);
         exit;
-    }
-} elseif (isset($_POST['submitcollation'])
-    && isset($_POST['db_collation'])
-    && empty($_POST['db_collation'])
-) {
-    $response = Response::getInstance();
-    if ($response->isAjax()) {
-        $response->setRequestStatus(false);
-        $response->addJSON(
-            'message',
-            Message::error(__('No collation provided.'))
-        );
     }
 }
 

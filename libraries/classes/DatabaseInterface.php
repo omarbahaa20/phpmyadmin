@@ -326,11 +326,13 @@ class DatabaseInterface
             $time = microtime(true) - $time;
             $this->_dbgQuery($query, $link, $result, $time);
             if ($GLOBALS['cfg']['DBG']['sqllog']) {
-                $warningsCount = '';
                 if ($options & DatabaseInterface::QUERY_STORE == DatabaseInterface::QUERY_STORE) {
-                    if (isset($this->_links[$link]->warning_count)) {
-                        $warningsCount = $this->_links[$link]->warning_count;
-                    }
+                    $tmp = $this->_extension->realQuery('
+                        SHOW COUNT(*) WARNINGS', $this->_links[$link], DatabaseInterface::QUERY_STORE
+                    );
+                    $warnings = $this->fetchRow($tmp);
+                } else {
+                    $warnings = 0;
                 }
 
                 openlog('phpMyAdmin', LOG_NDELAY | LOG_PID, LOG_USER);
@@ -338,7 +340,7 @@ class DatabaseInterface
                 syslog(
                     LOG_INFO,
                     'SQL[' . basename($_SERVER['SCRIPT_NAME']) . ']: '
-                    . sprintf('%0.3f', $time) . '(W:' . $warningsCount . ') > ' . $query
+                    . sprintf('%0.3f', $time) . '(W:' . $warnings[0] . ') > ' . $query
                 );
                 closelog();
             }
@@ -468,9 +470,9 @@ class DatabaseInterface
 
         if ($table_type) {
             if ($table_type == 'view') {
-                $sql_where_table .= " AND t.`TABLE_TYPE` NOT IN ('BASE TABLE', 'SYSTEM VERSIONED')";
+                $sql_where_table .= " AND t.`TABLE_TYPE` != 'BASE TABLE'";
             } elseif ($table_type == 'table') {
-                $sql_where_table .= " AND t.`TABLE_TYPE` IN ('BASE TABLE', 'SYSTEM VERSIONED')";
+                $sql_where_table .= " AND t.`TABLE_TYPE` = 'BASE TABLE'";
             }
         }
         return $sql_where_table;
@@ -610,9 +612,9 @@ class DatabaseInterface
                         function ($a, $b) {
                             $aLength = $a['Data_length'] + $a['Index_length'];
                             $bLength = $b['Data_length'] + $b['Index_length'];
-                            return $aLength == $bLength
+                            return ($aLength == $bLength)
                                 ? 0
-                                : ($aLength < $bLength ? -1 : 1);
+                                : ($aLength < $bLength) ? -1 : 1;
                         }
                     );
 
@@ -2173,7 +2175,7 @@ class DatabaseInterface
             $error .= $separator . __('The server is not responding.');
         } elseif ($error_number == 1698 ) {
             $error .= ' - ' . $error_message;
-            $error .= $separator . '<a href="logout.php' . Url::getCommon() . '" class="disableAjax">';
+            $error .= $separator . '<a href="logout.php' . Url::getCommon() . '">';
             $error .= __('Logout and try as another user.') . '</a>';
         } elseif ($error_number == 1005) {
             if (strpos($error_message, 'errno: 13') !== false) {

@@ -1,5 +1,5 @@
 <div id="edit_user_dialog">
-    {{ header|raw }}
+    {{ header }}
     <form class="submenu-item" name="usersForm" id="addUsersForm" action="server_privileges.php" method="post">
         {{ Url_getHiddenInputs() }}
         <input type="hidden" name="username" value="{{ username }}">
@@ -16,7 +16,7 @@
                     <em>{% trans 'Note: MySQL privilege names are expressed in English.' %}</em>
                 </small>
             </p>
-            {{ priv_checkboxes|raw }}
+            {{ priv_checkboxes }}
         </fieldset>
         <fieldset id="fieldset_user_privtable_footer" class="tblFooters">
             <input type="hidden" name="update_privs" value="1">

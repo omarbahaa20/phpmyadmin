@@ -269,11 +269,7 @@ class ExportXml extends ExportPlugin
                 . '" collation="' . htmlspecialchars($db_collation) . '" charset="' . htmlspecialchars($db_charset)
                 . '">' . $crlf;
 
-            if (is_null($tables)) {
-                $tables = array();
-            }
-
-            if (count($tables) === 0) {
+            if (count($tables) == 0) {
                 $tables[] = $table;
             }
 

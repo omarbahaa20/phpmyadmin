@@ -5,10 +5,14 @@
  *
  * @package PhpMyAdmin
  */
+ 
+// Suppress version check
+echo json_encode(array());
+exit();
 
-use PhpMyAdmin\Core;
-use PhpMyAdmin\VersionInformation;
-use PhpMyAdmin\Response;
+// Sets up the session
+use PMA\libraries\VersionInformation;
+use PMA\libraries\Response;
 
 $_GET['ajax_request'] = 'true';
 
@@ -18,7 +22,7 @@ require_once 'libraries/common.inc.php';
 Response::getInstance()->disable();
 
 // Always send the correct headers
-Core::headerJSON();
+PMA_headerJSON();
 
 $versionInformation = new VersionInformation();
 $versionDetails = $versionInformation->getLatestVersion();

@@ -596,50 +596,27 @@ class Types
             return $ret;
 
         case 'SPATIAL':
-            if ($serverVersion >= 50600) {
-                return array(
-                    'ST_GeomFromText',
-                    'ST_GeomFromWKB',
+            return array(
+                'GeomFromText',
+                'GeomFromWKB',
 
-                    'ST_GeomCollFromText',
-                    'ST_LineFromText',
-                    'ST_MLineFromText',
-                    'ST_PointFromText',
-                    'ST_MPointFromText',
-                    'ST_PolyFromText',
-                    'ST_MPolyFromText',
+                'GeomCollFromText',
+                'LineFromText',
+                'MLineFromText',
+                'PointFromText',
+                'MPointFromText',
+                'PolyFromText',
+                'MPolyFromText',
 
-                    'ST_GeomCollFromWKB',
-                    'ST_LineFromWKB',
-                    'ST_MLineFromWKB',
-                    'ST_PointFromWKB',
-                    'ST_MPointFromWKB',
-                    'ST_PolyFromWKB',
-                    'ST_MPolyFromWKB',
-                );
-            } else {
-                return array(
-                    'GeomFromText',
-                    'GeomFromWKB',
+                'GeomCollFromWKB',
+                'LineFromWKB',
+                'MLineFromWKB',
+                'PointFromWKB',
+                'MPointFromWKB',
+                'PolyFromWKB',
+                'MPolyFromWKB',
+            );
 
-                    'GeomCollFromText',
-                    'LineFromText',
-                    'MLineFromText',
-                    'PointFromText',
-                    'MPointFromText',
-                    'PolyFromText',
-                    'MPolyFromText',
-
-                    'GeomCollFromWKB',
-                    'LineFromWKB',
-                    'MLineFromWKB',
-                    'PointFromWKB',
-                    'MPointFromWKB',
-                    'PolyFromWKB',
-                    'MPolyFromWKB',
-                );
-
-            }
         }
         return array();
     }

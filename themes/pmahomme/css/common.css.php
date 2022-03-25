@@ -224,10 +224,6 @@ input[type=number] {
     width: 50px;
 }
 
-input#auto_increment_opt {
-    width: min-content;
-}
-
 input[type=text],
 input[type=password],
 input[type=number],
@@ -906,10 +902,9 @@ body#loginform div.container {
 }
 
 form.login label {
+    float: <?php echo $left; ?>;
     width: 10em;
     font-weight: bolder;
-    display: inline-block;
-    margin-<?php echo $left; ?>: 2em;
 }
 
 form.login input[type=text],
@@ -961,9 +956,6 @@ form.login select {
     display: inline-block;
 }
 
-li.last.database{
-    margin-bottom: 15px
-}
 /******************************************************************************/
 /* specific elements */
 
@@ -2718,7 +2710,6 @@ fieldset .disabled-field td {
 }
 
 .pma_table th.draggable span,
-.sticky_columns th.draggable span,
 .pma_table tbody td span {
     display: block;
     overflow: hidden;

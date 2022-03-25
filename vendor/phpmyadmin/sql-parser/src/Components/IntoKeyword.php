@@ -26,19 +26,10 @@ class IntoKeyword extends Component
      * @var array
      */
     public static $FIELDS_OPTIONS = array(
-        'TERMINATED BY' => array(
-            1,
-            'expr',
-        ),
+        'TERMINATED BY' => array(1, 'expr'),
         'OPTIONALLY' => 2,
-        'ENCLOSED BY' => array(
-            3,
-            'expr',
-        ),
-        'ESCAPED BY' => array(
-            4,
-            'expr',
-        )
+        'ENCLOSED BY' => array(3, 'expr'),
+        'ESCAPED BY' => array(4, 'expr'),
     );
 
     /**
@@ -47,14 +38,8 @@ class IntoKeyword extends Component
      * @var array
      */
     public static $LINES_OPTIONS = array(
-        'STARTING BY' => array(
-            1,
-            'expr',
-        ),
-        'TERMINATED BY' => array(
-            2,
-            'expr',
-        )
+        'STARTING BY' => array(1, 'expr'),
+        'TERMINATED BY' => array(2, 'expr'),
     );
 
     /**
@@ -205,7 +190,7 @@ class IntoKeyword extends Component
                         $list,
                         array(
                             'parseField' => 'table',
-                            'breakOnAlias' => true
+                            'breakOnAlias' => true,
                         )
                     );
                 } else {
@@ -222,10 +207,10 @@ class IntoKeyword extends Component
                 $ret->dest = $token->value;
 
                 $state = 3;
-            } elseif ($state === 3) {
+            } elseif ($state == 3) {
                 $ret->parseFileOptions($parser, $list, $token->value);
                 $state = 4;
-            } elseif ($state === 4) {
+            } elseif ($state == 4) {
                 if ($token->type === Token::TYPE_KEYWORD && $token->keyword !== 'LINES') {
                     break;
                 }
@@ -252,7 +237,11 @@ class IntoKeyword extends Component
                 static::$FIELDS_OPTIONS
             );
 
-            $this->fields_keyword = ($keyword === 'FIELDS');
+            if ($keyword === 'FIELDS') {
+                $this->fields_keyword = true;
+            } else {
+                $this->fields_keyword = false;
+            }
         } else {
             // parse line options
             $this->lines_options = OptionsArray::parse(
@@ -272,7 +261,7 @@ class IntoKeyword extends Component
     public static function build($component, array $options = array())
     {
         if ($component->dest instanceof Expression) {
-            $columns = ! empty($component->columns) ? '(`' . implode('`, `', $component->columns) . '`)' : '';
+            $columns = !empty($component->columns) ? '(`' . implode('`, `', $component->columns) . '`)' : '';
 
             return $component->dest . $columns;
         } elseif (isset($component->values)) {
@@ -283,7 +272,7 @@ class IntoKeyword extends Component
 
         $fields_options_str = OptionsArray::build($component->fields_options);
         if (trim($fields_options_str) !== '') {
-            $ret .= $component->fields_keyword ? ' FIELDS' : ' COLUMNS';
+            $ret .= ($component->fields_keyword) ? ' FIELDS' : ' COLUMNS';
             $ret .= ' ' . $fields_options_str;
         }
 

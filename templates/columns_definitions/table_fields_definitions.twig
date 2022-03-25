@@ -98,7 +98,6 @@
     {% set options = {'': '', 'VIRTUAL': 'VIRTUAL'} %}
     {% if server_type == 'MariaDB' %}
         {% set options = options|merge({'PERSISTENT': 'PERSISTENT'}) %}
-        {% set options = options|merge({'STORED': 'STORED'}) %}
     {% else %}
         {% set options = options|merge({'STORED': 'STORED'}) %}
     {% endif %}

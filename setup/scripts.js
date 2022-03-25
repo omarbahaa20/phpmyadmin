@@ -216,13 +216,3 @@ $(function () {
 //
 // END: User preferences allow/disallow UI
 // ------------------------------------------------------------------
-
-$(function () {
-    $('.delete-server').on('click', function (e) {
-        e.preventDefault();
-        var $this = $(this);
-        $.post($this.attr('href'), $this.attr('data-post'), function () {
-            window.location.replace('index.php');
-        });
-    });
-});

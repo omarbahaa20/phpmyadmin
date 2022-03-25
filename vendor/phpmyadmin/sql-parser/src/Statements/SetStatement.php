@@ -27,14 +27,7 @@ class SetStatement extends Statement
      * @var array
      */
     public static $CLAUSES = array(
-        'SET' => array(
-            'SET',
-            3
-        ),
-        '_END_OPTIONS' => array(
-            '_END_OPTIONS',
-            1
-        )
+        'SET' => array('SET', 3),
     );
 
     /**
@@ -43,30 +36,10 @@ class SetStatement extends Statement
      * @var array
      */
     public static $OPTIONS = array(
-        'CHARSET' => array(
-            3,
-            'var',
-        ),
-        'CHARACTER SET' => array(
-            3,
-            'var',
-        ),
-        'NAMES' => array(
-            3,
-            'var',
-        ),
-        'PASSWORD' => array(
-            3,
-            'expr',
-        )
-    );
-
-    public static $END_OPTIONS = array(
-        'COLLATE' => array(
-            1,
-            'var',
-        ),
-        'DEFAULT' => 1
+        'CHARSET' => array(3, 'var'),
+        'CHARACTER SET' => array(3, 'var'),
+        'NAMES' => array(3, 'var'),
+        'PASSWORD' => array(3, 'expr'),
     );
 
     /**
@@ -75,15 +48,6 @@ class SetStatement extends Statement
      * @var OptionsArray[]
      */
     public $options;
-
-    /**
-     * The end options of this query.
-     *
-     * @var OptionsArray
-     *
-     * @see static::$END_OPTIONS
-     */
-    public $end_options;
 
     /**
      * The updated values.
@@ -97,10 +61,7 @@ class SetStatement extends Statement
      */
     public function build()
     {
-        $ret = 'SET ' . OptionsArray::build($this->options)
-            . ' ' . SetOperation::build($this->set)
-            . ' ' . OptionsArray::build($this->end_options);
-
-        return trim($ret);
+        return 'SET ' . OptionsArray::build($this->options)
+            . ' ' . SetOperation::build($this->set);
     }
 }

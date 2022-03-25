@@ -325,7 +325,7 @@ class Triggers
         }
         $query  = "SELECT `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` ";
         $query .= "WHERE `TABLE_SCHEMA`='" . $GLOBALS['dbi']->escapeString($db) . "' ";
-        $query .= "AND `TABLE_TYPE` IN ('BASE TABLE', 'SYSTEM VERSIONED')";
+        $query .= "AND `TABLE_TYPE`='BASE TABLE'";
         $tables = $GLOBALS['dbi']->fetchResult($query);
 
         // Create the output

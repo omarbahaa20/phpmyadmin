@@ -83,7 +83,7 @@ class TableGisVisualizationController extends TableController
     {
         $this->response->disable();
         $file_name = $this->visualizationSettings['spatialColumn'];
-        $save_format = $_GET['fileFormat'];
+        $save_format = $_REQUEST['fileFormat'];
         $this->visualization->toFile($file_name, $save_format);
     }
 
@@ -120,12 +120,9 @@ class TableGisVisualizationController extends TableController
         }
 
         // Get settings if any posted
-        if (Core::isValid($_POST['visualizationSettings'], 'array')) {
-            $this->visualizationSettings = $_POST['visualizationSettings'];
+        if (Core::isValid($_REQUEST['visualizationSettings'], 'array')) {
+            $this->visualizationSettings = $_REQUEST['visualizationSettings'];
         }
-
-        // Check mysql version
-        $this->visualizationSettings['mysqlVersion'] = $this->dbi->getVersion();
 
         if (!isset($this->visualizationSettings['labelColumn'])
             && isset($labelCandidates[0])
@@ -139,10 +136,10 @@ class TableGisVisualizationController extends TableController
         }
 
         // Convert geometric columns from bytes to text.
-        $pos = isset($_GET['pos']) ? $_GET['pos']
+        $pos = isset($_REQUEST['pos']) ? $_REQUEST['pos']
             : $_SESSION['tmpval']['pos'];
-        if (isset($_GET['session_max_rows'])) {
-            $rows = $_GET['session_max_rows'];
+        if (isset($_REQUEST['session_max_rows'])) {
+            $rows = $_REQUEST['session_max_rows'];
         } else {
             if ($_SESSION['tmpval']['max_rows'] != 'all') {
                 $rows = $_SESSION['tmpval']['max_rows'];
@@ -157,7 +154,7 @@ class TableGisVisualizationController extends TableController
             $pos
         );
 
-        if (isset($_GET['saveToFile'])) {
+        if (isset($_REQUEST['saveToFile'])) {
             $this->saveToFileAction();
             return;
         }
@@ -171,7 +168,7 @@ class TableGisVisualizationController extends TableController
         );
 
         // If all the rows contain SRID, use OpenStreetMaps on the initial loading.
-        if (! isset($_POST['displayVisualization'])) {
+        if (! isset($_REQUEST['displayVisualization'])) {
             if ($this->visualization->hasSrid()) {
                 $this->visualizationSettings['choice'] = 'useBaseLayer';
             } else {
@@ -196,7 +193,6 @@ class TableGisVisualizationController extends TableController
             array_merge(
                 $this->url_params,
                 array(
-                    'sql_signature' => Core::signSqlQuery($this->sql_query),
                     'saveToFile' => true,
                     'session_max_rows' => $rows,
                     'pos' => $pos

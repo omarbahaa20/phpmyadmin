@@ -336,11 +336,6 @@ class Export
     {
         $file_handle = null;
         $message = '';
-        $doNotSaveItOver = true;
-
-        if(isset($_POST['quick_export_onserver_overwrite'])) {
-            $doNotSaveItOver = $_POST['quick_export_onserver_overwrite'] != 'saveitover';
-        }
 
         $save_filename = Util::userDir($GLOBALS['cfg']['SaveDir'])
             . preg_replace('@[/\\\\]@', '_', $filename);
@@ -348,7 +343,7 @@ class Export
         if (@file_exists($save_filename)
             && ((! $quick_export && empty($_POST['onserver_overwrite']))
             || ($quick_export
-            && $doNotSaveItOver))
+            && $_POST['quick_export_onserver_overwrite'] != 'saveitover'))
         ) {
             $message = Message::error(
                 __(
@@ -491,13 +486,24 @@ class Export
         }
 
         // Convert the multiple select elements from an array to a string
-        if ($export_type == 'database') {
-            $structOrDataForced = empty($_POST['structure_or_data_forced']);
-            if ($structOrDataForced && ! isset($_POST['table_structure'])) {
-                $_POST['table_structure'] = [];
+        if ($export_type == 'server' && isset($_POST['db_select'])) {
+            $_POST['db_select'] = implode(",", $_POST['db_select']);
+        } elseif ($export_type == 'database') {
+            if (isset($_POST['table_select'])) {
+                $_POST['table_select'] = implode(",", $_POST['table_select']);
             }
-            if ($structOrDataForced && ! isset($_POST['table_data'])) {
-                $_POST['table_data'] = [];
+            if (isset($_POST['table_structure'])) {
+                $_POST['table_structure'] = implode(
+                    ",",
+                    $_POST['table_structure']
+                );
+            } elseif (empty($_POST['structure_or_data_forced'])) {
+                $_POST['table_structure'] = '';
+            }
+            if (isset($_POST['table_data'])) {
+                $_POST['table_data'] = implode(",", $_POST['table_data']);
+            } elseif (empty($_POST['structure_or_data_forced'])) {
+                $_POST['table_data'] = '';
             }
         }
 
@@ -514,11 +520,11 @@ class Export
         foreach($_POST as $name => $value) {
             if (is_array($value)) {
                 foreach($value as $val) {
-                    $refreshButton .= '<input type="hidden" name="' . htmlentities((string) $name) . '[]" value="' . htmlentities((string) $val) . '">';
+                    $refreshButton .= '<input type="hidden" name="' . urlencode((string) $name) . '[]" value="' . urlencode((string) $val) . '">';
                 }
             }
             else {
-                $refreshButton .= '<input type="hidden" name="' . htmlentities((string) $name) . '" value="' . htmlentities((string) $value) . '">';
+                $refreshButton .= '<input type="hidden" name="' . urlencode((string) $name) . '" value="' . urlencode((string) $value) . '">';
             }
         }
         $refreshButton .= '</form>';
@@ -1095,7 +1101,7 @@ class Export
             Core::fatalError(__('Bad type!'));
         }
 
-        $GLOBALS['dbi']->selectDb($_POST['db']);
-        $export_plugin->exportSchema($_POST['db']);
+        $GLOBALS['dbi']->selectDb($GLOBALS['db']);
+        $export_plugin->exportSchema($GLOBALS['db']);
     }
 }

@@ -88,6 +88,12 @@ class DbiMysqli implements DbiExtension
 
         $link = mysqli_init();
 
+        if (defined('PMA_ENABLE_LDI')) {
+            mysqli_options($link, MYSQLI_OPT_LOCAL_INFILE, true);
+        } else {
+            mysqli_options($link, MYSQLI_OPT_LOCAL_INFILE, false);
+        }
+
         $client_flags = 0;
 
         /* Optionally compress connection */
@@ -167,12 +173,6 @@ class DbiMysqli implements DbiExtension
                     return self::connect($user, $password, $server);
             }
             return false;
-        }
-
-        if (defined('PMA_ENABLE_LDI')) {
-            mysqli_options($link, MYSQLI_OPT_LOCAL_INFILE, true);
-        } else {
-            mysqli_options($link, MYSQLI_OPT_LOCAL_INFILE, false);
         }
 
         return $link;
@@ -520,9 +520,6 @@ class DbiMysqli implements DbiExtension
      */
     public function fieldLen($result, $i)
     {
-        if ($i >= $this->numFields($result)) {
-            return false;
-        }
         return mysqli_fetch_field_direct($result, $i)->length;
     }
 
@@ -536,9 +533,6 @@ class DbiMysqli implements DbiExtension
      */
     public function fieldName($result, $i)
     {
-        if ($i >= $this->numFields($result)) {
-            return false;
-        }
         return mysqli_fetch_field_direct($result, $i)->name;
     }
 
@@ -552,9 +546,6 @@ class DbiMysqli implements DbiExtension
      */
     public function fieldFlags($result, $i)
     {
-        if ($i >= $this->numFields($result)) {
-            return false;
-        }
         $f = mysqli_fetch_field_direct($result, $i);
         $type = $f->type;
         $charsetnr = $f->charsetnr;

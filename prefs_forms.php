@@ -85,9 +85,7 @@ if ($form_display->hasErrors()) {
     </div>
     <?php
 }
-echo $form_display->getDisplay(true, true, true, 'prefs_forms.php?form=' . $form_param, array(
-    'server' => $GLOBALS['server']
-));
+echo $form_display->getDisplay(true, true);
 
 if ($response->isAjax()) {
     $response->addJSON('_disableNaviSettings', true);

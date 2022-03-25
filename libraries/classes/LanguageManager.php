@@ -423,13 +423,6 @@ class LanguageManager
             'ms|malay',
             'ms_MY',
         ),
-        'my' => array(
-            'my',
-            'Burmese',
-            'မြန်မာ',
-            'my|burmese',
-            '',
-        ),
         'ne' => array(
             'ne',
             'Nepali',
@@ -443,13 +436,6 @@ class LanguageManager
             'Norsk',
             'nb|norwegian',
             'nb_NO',
-        ),
-        'nn' => array(
-            'nn',
-            'Norwegian Nynorsk',
-            'Nynorsk',
-            'nn|nynorsk',
-            'nn_NO',
         ),
         'nl' => array(
             'nl',
@@ -523,7 +509,7 @@ class LanguageManager
         ),
         'sq' => array(
             'sq',
-            'Albanian',
+            'Slbanian',
             'Shqip',
             'sq|albanian',
             'sq_AL',
@@ -726,11 +712,11 @@ class LanguageManager
     {
         if (! $this->_available_locales) {
 
-            if (! isset($GLOBALS['PMA_Config']) || empty($GLOBALS['PMA_Config']->get('FilterLanguages'))) {
+            if (empty($GLOBALS['cfg']['FilterLanguages'])) {
                 $this->_available_locales = $this->listLocaleDir();
             } else {
                 $this->_available_locales = preg_grep(
-                    '@' . $GLOBALS['PMA_Config']->get('FilterLanguages') . '@',
+                    '@' . $GLOBALS['cfg']['FilterLanguages'] . '@',
                     $this->listLocaleDir()
                 );
             }

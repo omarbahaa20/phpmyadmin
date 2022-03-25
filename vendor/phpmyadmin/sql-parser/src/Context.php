@@ -102,42 +102,22 @@ abstract class Context
         //                 SET @i = 0;
 
         // @see Token::FLAG_OPERATOR_ARITHMETIC
-        '%' => 1,
-        '*' => 1,
-        '+' => 1,
-        '-' => 1,
-        '/' => 1,
+        '%' => 1, '*' => 1, '+' => 1, '-' => 1, '/' => 1,
 
         // @see Token::FLAG_OPERATOR_LOGICAL
-        '!' => 2,
-        '!=' => 2,
-        '&&' => 2,
-        '<' => 2,
-        '<=' => 2,
-        '<=>' => 2,
-        '<>' => 2,
-        '=' => 2,
-        '>' => 2,
-        '>=' => 2,
+        '!' => 2, '!=' => 2, '&&' => 2, '<' => 2, '<=' => 2,
+        '<=>' => 2, '<>' => 2, '=' => 2, '>' => 2, '>=' => 2,
         '||' => 2,
 
         // @see Token::FLAG_OPERATOR_BITWISE
-        '&' => 4,
-        '<<' => 4,
-        '>>' => 4,
-        '^' => 4,
-        '|' => 4,
+        '&' => 4, '<<' => 4, '>>' => 4, '^' => 4, '|' => 4,
         '~' => 4,
 
         // @see Token::FLAG_OPERATOR_ASSIGNMENT
         ':=' => 8,
 
         // @see Token::FLAG_OPERATOR_SQL
-        '(' => 16,
-        ')' => 16,
-        '.' => 16,
-        ',' => 16,
-        ';' => 16
+        '(' => 16, ')' => 16, '.' => 16, ',' => 16, ';' => 16,
     );
 
     /**
@@ -275,8 +255,10 @@ abstract class Context
         $str = strtoupper($str);
 
         if (isset(static::$KEYWORDS[$str])) {
-            if ($isReserved && ! (static::$KEYWORDS[$str] & Token::FLAG_KEYWORD_RESERVED)) {
-                return null;
+            if ($isReserved) {
+                if (!(static::$KEYWORDS[$str] & Token::FLAG_KEYWORD_RESERVED)) {
+                    return null;
+                }
             }
 
             return static::$KEYWORDS[$str];
@@ -297,7 +279,7 @@ abstract class Context
      */
     public static function isOperator($str)
     {
-        if (! isset(static::$OPERATORS[$str])) {
+        if (!isset(static::$OPERATORS[$str])) {
             return null;
         }
 
@@ -333,21 +315,21 @@ abstract class Context
     public static function isComment($str, $end = false)
     {
         $len = strlen($str);
-        if ($len === 0) {
+        if ($len == 0) {
             return null;
         }
         if ($str[0] === '#') {
             return Token::FLAG_COMMENT_BASH;
         } elseif (($len > 1) && ($str[0] === '/') && ($str[1] === '*')) {
-            return (($len > 2) && ($str[2] === '!')) ?
+            return (($len > 2) && ($str[2] == '!')) ?
                 Token::FLAG_COMMENT_MYSQL_CMD : Token::FLAG_COMMENT_C;
         } elseif (($len > 1) && ($str[0] === '*') && ($str[1] === '/')) {
             return Token::FLAG_COMMENT_C;
         } elseif (($len > 2) && ($str[0] === '-')
-            && ($str[1] === '-') && static::isWhitespace($str[2])
+            && ($str[1] === '-') && (static::isWhitespace($str[2]))
         ) {
             return Token::FLAG_COMMENT_SQL;
-        } elseif (($len === 2) && $end && ($str[0] === '-') && ($str[1] === '-')) {
+        } elseif (($len == 2) && $end && ($str[0] === '-') && ($str[1] === '-')) {
             return Token::FLAG_COMMENT_SQL;
         }
 
@@ -402,14 +384,14 @@ abstract class Context
      */
     public static function isSymbol($str)
     {
-        if (strlen($str) === 0) {
+        if (strlen($str) == 0) {
             return null;
         }
         if ($str[0] === '@') {
             return Token::FLAG_SYMBOL_VARIABLE;
         } elseif ($str[0] === '`') {
             return Token::FLAG_SYMBOL_BACKTICK;
-        } elseif ($str[0] === ':' || $str[0] === '?') {
+        } elseif ($str[0] === ':') {
             return Token::FLAG_SYMBOL_PARAMETER;
         }
 
@@ -428,7 +410,7 @@ abstract class Context
      */
     public static function isString($str)
     {
-        if (strlen($str) === 0) {
+        if (strlen($str) == 0) {
             return null;
         }
         if ($str[0] === '\'') {
@@ -479,7 +461,7 @@ abstract class Context
             // Short context name (must be formatted into class name).
             $context = self::$contextPrefix . $context;
         }
-        if (! class_exists($context)) {
+        if (!class_exists($context)) {
             throw @new LoaderException(
                 'Specified context ("' . $context . '") does not exist.',
                 $context
@@ -568,7 +550,7 @@ abstract class Context
         }
 
         if ((static::$MODE & self::SQL_MODE_NO_ENCLOSING_QUOTES)
-            && (! static::isKeyword($str, true))
+            && (!static::isKeyword($str, true))
         ) {
             return $str;
         }

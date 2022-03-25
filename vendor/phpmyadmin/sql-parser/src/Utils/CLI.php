@@ -32,7 +32,6 @@ class CLI
     public function usageHighlight()
     {
         echo "Usage: highlight-query --query SQL [--format html|cli|text]\n";
-        echo "       cat file.sql | highlight-query\n";
     }
 
     public function getopt($opt, $long)
@@ -42,23 +41,18 @@ class CLI
 
     public function parseHighlight()
     {
-        $longopts = array(
-            'help',
-            'query:',
-            'format:'
-        );
+        $longopts = array('help', 'query:', 'format:');
         $params = $this->getopt(
-            'hq:f:',
-            $longopts
+            'hq:f:', $longopts
         );
         if ($params === false) {
             return false;
         }
         $this->mergeLongOpts($params, $longopts);
-        if (! isset($params['f'])) {
+        if (!isset($params['f'])) {
             $params['f'] = 'cli';
         }
-        if (! in_array($params['f'], array('html', 'cli', 'text'))) {
+        if (!in_array($params['f'], array('html', 'cli', 'text'))) {
             echo "ERROR: Invalid value for format!\n";
 
             return false;
@@ -78,15 +72,9 @@ class CLI
 
             return 0;
         }
-        if (!isset($params['q'])) {
-            if ($stdIn = $this->readStdin()) {
-                $params['q'] = $stdIn;
-            }
-        }
         if (isset($params['q'])) {
             echo Formatter::format(
-                $params['q'],
-                array('type' => $params['f'])
+                $params['q'], array('type' => $params['f'])
             );
             echo "\n";
 
@@ -101,19 +89,13 @@ class CLI
     public function usageLint()
     {
         echo "Usage: lint-query --query SQL\n";
-        echo "       cat file.sql | lint-query\n";
     }
 
     public function parseLint()
     {
-        $longopts = array(
-            'help',
-            'query:',
-            'context:'
-        );
+        $longopts = array('help', 'query:', 'context:');
         $params = $this->getopt(
-            'hq:c:',
-            $longopts
+            'hq:c:', $longopts
         );
         $this->mergeLongOpts($params, $longopts);
 
@@ -134,16 +116,11 @@ class CLI
         if (isset($params['c'])) {
             Context::load($params['c']);
         }
-        if (!isset($params['q'])) {
-            if ($stdIn = $this->readStdin()) {
-                $params['q'] = $stdIn;
-            }
-        }
         if (isset($params['q'])) {
             $lexer = new Lexer($params['q'], false);
             $parser = new Parser($lexer->list);
             $errors = Error::get(array($lexer, $parser));
-            if (count($errors) === 0) {
+            if (count($errors) == 0) {
                 return 0;
             }
             $output = Error::format($errors);
@@ -161,18 +138,13 @@ class CLI
     public function usageTokenize()
     {
         echo "Usage: tokenize-query --query SQL\n";
-        echo "       cat file.sql | tokenize-query\n";
     }
 
     public function parseTokenize()
     {
-        $longopts = array(
-            'help',
-            'query:'
-        );
+        $longopts = array('help', 'query:');
         $params = $this->getopt(
-            'hq:',
-            $longopts
+            'hq:', $longopts
         );
         $this->mergeLongOpts($params, $longopts);
 
@@ -189,11 +161,6 @@ class CLI
             $this->usageTokenize();
 
             return 0;
-        }
-        if (!isset($params['q'])) {
-            if ($stdIn = $this->readStdin()) {
-                $params['q'] = $stdIn;
-            }
         }
         if (isset($params['q'])) {
             $lexer = new Lexer($params['q'], false);
@@ -216,13 +183,5 @@ class CLI
         $this->usageTokenize();
 
         return 1;
-    }
-
-    private function readStdin() {
-        stream_set_blocking(STDIN, false);
-        $stdin = stream_get_contents(STDIN);
-        // restore-default block-mode setting
-        stream_set_blocking(STDIN, true);
-        return $stdin;
     }
 }
