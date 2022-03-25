@@ -23,12 +23,12 @@ $i = 0;
 
 /* Heroku remote server */
 $i++;
-$cfg['Servers'][$i]['verbose'] = 'CLEARDB';
-$cfg["Servers"][$i]["host"] = "eu-cdbr-west-02.cleardb.net"; //provide hostname
+$cfg['Servers'][$i]['verbose'] = 'freedb_heroku';
+$cfg["Servers"][$i]["host"] = "sql.freedb.tech"; //provide hostname
 $cfg['Servers'][$i]['extension'] = 'mysqli';
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
-$cfg["Servers"][$i]["user"] = "b214e938e157d1"; //user name for your remote server
-$cfg["Servers"][$i]["password"] = "854c8f16"; //password
+$cfg["Servers"][$i]["user"] = "freedb_comnds"; //user name for your remote server
+$cfg["Servers"][$i]["password"] = "T4$992#!n$?#73F"; //password
 $cfg["Servers"][$i]["auth_type"] = "config"; // keep it as config
 
 /**
